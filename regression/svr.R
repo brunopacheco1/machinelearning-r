@@ -3,7 +3,7 @@ library(ggplot2)
 library(e1071)
 
 #Importing
-dataset = read.csv('./data/position_salaries.csv')
+dataset = read.csv('data/position_salaries.csv')
 
 dataset$Position <- NULL
 

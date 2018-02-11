@@ -2,7 +2,7 @@ library(caTools)
 library(ggplot2)
 
 #Importing
-dataset = read.csv('./data/startups.csv')
+dataset = read.csv('data/startups.csv')
 
 #Encoding categorical data
 dataset$State = factor(dataset$State,
