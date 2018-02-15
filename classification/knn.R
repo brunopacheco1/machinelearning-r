@@ -1,4 +1,5 @@
 library(caTools)
+library(class)
 library(ElemStatLearn)
 
 #Importing
@@ -18,14 +19,12 @@ test_set = subset(dataset, split == FALSE)
 training_set[-3] = scale(training_set[-3])
 test_set[-3] = scale(test_set[-3])
 
-#Fiting
-classifier = glm(formula = Purchased ~ .,
-                 family = binomial,
-                 data = training_set)
-
-#Predicting
-prob_pred = predict(classifier, type = 'response', newdata = test_set[-3])
-y_pred = ifelse(prob_pred > 0.5, 1, 0)
+#Fiting and Predicting
+y_pred = knn(train = training_set[, -3],
+             test = test_set[, -3],
+             cl = training_set[, 3],
+             k = 5,
+             prob = TRUE)
 
 #Confusion Matrix
 cm = table(test_set[, 3], y_pred > 0.5)
@@ -36,10 +35,9 @@ X1 = seq(min(set[, 1]) - 1, max(set[, 1]) + 1, by = 0.01)
 X2 = seq(min(set[, 2]) - 1, max(set[, 2]) + 1, by = 0.01)
 grid_set = expand.grid(X1, X2)
 colnames(grid_set) = c('Age', 'EstimatedSalary')
-prob_set = predict(classifier, type = 'response', newdata = grid_set)
-y_grid = ifelse(prob_set > 0.5, 1, 0)
+y_grid = knn(train = training_set[, -3], test = grid_set, cl = training_set[, 3], k = 5)
 plot(set[, -3],
-     main = 'Logistic Regression (Training set)',
+     main = 'K-NN (Training set)',
      xlab = 'Age', ylab = 'Estimated Salary',
      xlim = range(X1), ylim = range(X2))
 contour(X1, X2, matrix(as.numeric(y_grid), length(X1), length(X2)), add = TRUE)
@@ -52,10 +50,9 @@ X1 = seq(min(set[, 1]) - 1, max(set[, 1]) + 1, by = 0.01)
 X2 = seq(min(set[, 2]) - 1, max(set[, 2]) + 1, by = 0.01)
 grid_set = expand.grid(X1, X2)
 colnames(grid_set) = c('Age', 'EstimatedSalary')
-prob_set = predict(classifier, type = 'response', newdata = grid_set)
-y_grid = ifelse(prob_set > 0.5, 1, 0)
+y_grid = knn(train = training_set[, -3], test = grid_set, cl = training_set[, 3], k = 5)
 plot(set[, -3],
-     main = 'Logistic Regression (Test set)',
+     main = 'K-NN (Test set)',
      xlab = 'Age', ylab = 'Estimated Salary',
      xlim = range(X1), ylim = range(X2))
 contour(X1, X2, matrix(as.numeric(y_grid), length(X1), length(X2)), add = TRUE)
